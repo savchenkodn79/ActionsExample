@@ -1,7 +1,25 @@
-name: GitHub Actions Demo
-on: [push]
+name: tfsec
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 jobs:
-  Explore-GitHub-Actions:
-    runs-on: aquasecurity/tfsec
+  tfsec:
+    name: tfsec sarif report
+    runs-on: ubuntu-latest
+
     steps:
-      - run: tfsec . 
+      - name: Clone repo
+        uses: actions/checkout@master
+
+      - name: tfsec
+        uses: tfsec/tfsec-sarif-action@master
+        with:
+          sarif_file: tfsec.sarif          
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          # Path to SARIF file relative to the root of the repository
+          sarif_file: tfsec.sarif         
