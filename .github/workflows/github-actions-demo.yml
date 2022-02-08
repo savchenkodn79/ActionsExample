@@ -18,11 +18,8 @@ jobs:
         with:
           sarif_file: tfsec.sarif   
 
-      - name: Cat tfsec.sarif
-        run: cat tfsec.sarif
-
-      - name: Show directory
-        run: ls -la
+      - name: Put in a Defectdojo
+        run: curl --location --request POST 'http://dd.dmytro.in.ua/api/v2/import-scan/' --header 'Authorization: Token b2a339909f50bb0b8c8dd033bbaa2d4efb1f82bc' --form 'engagement=10' --form 'verified=true' --form 'active=true' --form 'scan_type=SARIF' --form 'file=@tfsec.sarif'
 
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v1
